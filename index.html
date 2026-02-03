@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -25,7 +24,7 @@
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen overflow-x-hidden">
     <div id="root"></div>
-    <!-- 直接引用源码入口，环境会自动处理 .tsx 转换 -->
+    <!-- 核心修复：直接引用工程根目录下的 index.tsx，不引用 /assets/ 下的临时文件 -->
     <script type="module" src="index.tsx"></script>
 </body>
 </html>
