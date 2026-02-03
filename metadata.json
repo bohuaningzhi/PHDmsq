@@ -1,0 +1,7 @@
+{
+  "name": "博食灵签 (PhD Gourmet Oracle)",
+  "description": "A specialized meal picker for PhD students in Lanzhou, Beijing, Harbin, and Xi'an, featuring a traditional 'fortune stick' shaking experience.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
