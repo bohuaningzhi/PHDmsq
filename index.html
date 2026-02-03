@@ -7,9 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       // 核心补丁：防止 Gemini SDK 因为找不到 process 对象而导致整个 App 崩溃
-      window.process = { 
+      window.process = window.process || { 
         env: { 
-          // Netlify 会在构建时注入环境变量，但在客户端我们需确保对象存在
           API_KEY: "" 
         } 
       };
@@ -26,10 +25,19 @@
   }
 }
 </script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&display=swap');
+      body {
+        font-family: 'Noto Serif SC', serif;
+        background-image: 
+          radial-gradient(#e5e7eb 1px, transparent 1px);
+        background-size: 20px 20px;
+      }
+    </style>
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen overflow-x-hidden">
     <div id="root"></div>
-    <!-- 关键修复：必须显式引入入口文件 -->
+    <!-- 关键修复：移除 /assets/ 引用，直接引用 index.tsx -->
     <script type="module" src="index.tsx"></script>
 </body>
 </html>
