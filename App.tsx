@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { City, MealTime, FortuneResult } from './types.ts';
-import { FOOD_DATABASE, LUCK_LEVELS } from './constants.tsx';
-import StickBox from './components/StickBox.tsx';
-import ResultModal from './components/ResultModal.tsx';
-import { getPhDFortune } from './services/geminiService.ts';
+import { City, MealTime, FortuneResult } from './types';
+import { FOOD_DATABASE, LUCK_LEVELS } from './constants';
+import StickBox from './components/StickBox';
+import ResultModal from './components/ResultModal';
+import { getPhDFortune } from './services/geminiService';
 
 const App: React.FC = () => {
   const [selectedCity, setSelectedCity] = useState<City>(City.BEIJING);
@@ -63,6 +63,7 @@ const App: React.FC = () => {
     };
 
     if (window.DeviceMotionEvent) {
+        // Request permission for iOS 13+
         if ((typeof DeviceMotionEvent as any).requestPermission === 'function') {
             (DeviceMotionEvent as any).requestPermission();
         }
@@ -73,11 +74,13 @@ const App: React.FC = () => {
 
   return (
     <div className="max-w-md mx-auto min-h-screen bg-slate-50 flex flex-col p-6 font-sans">
+      {/* Header */}
       <header className="mb-8 text-center pt-8">
         <h1 className="text-3xl font-black text-slate-800 tracking-tight">博食灵签</h1>
         <p className="text-slate-500 text-sm mt-1">博士生食堂决策玄学系统 v1.1</p>
       </header>
 
+      {/* Selectors */}
       <section className="space-y-6 mb-12">
         <div>
           <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 block">选择校区/城市</label>
@@ -118,6 +121,7 @@ const App: React.FC = () => {
         </div>
       </section>
 
+      {/* Fortune Box Area */}
       <section className="flex-1 flex flex-col items-center justify-center space-y-8 py-10">
         <StickBox isShaking={isShaking} />
         
@@ -143,14 +147,17 @@ const App: React.FC = () => {
         </button>
       </section>
 
+      {/* Footer Info */}
       <footer className="mt-8 text-center pb-6">
         <p className="text-[10px] text-slate-300 uppercase tracking-[0.2em]">
           Design for PhDs · No more decision fatigue
         </p>
       </footer>
 
+      {/* Modals */}
       <ResultModal result={result} onClose={() => setResult(null)} />
       
+      {/* Global Loading Spinner for API call */}
       {loading && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-white/40 backdrop-blur-sm">
            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
