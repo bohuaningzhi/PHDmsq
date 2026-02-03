@@ -1,11 +1,11 @@
-
 import { GoogleGenAI } from "@google/genai";
 import { FoodItem, City, MealTime } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export const getPhDFortune = async (food: FoodItem, city: City, mealTime: MealTime): Promise<string> => {
   try {
+    // 动态实例化，防止全局初始化失败导致整个应用崩溃
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+    
     const prompt = `
       我正在为一款给博士生选择饭点的APP设计文案。
       当前背景：
