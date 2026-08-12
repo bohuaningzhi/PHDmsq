@@ -1,4 +1,3 @@
-import { GoogleGenAI, Type } from "@google/genai";
 import { FoodItem, City, MealTime, PhDMajor, FortuneDetail, FortuneResult } from "../types";
 
 // 离线算法概率词库（确保无网络或无API Key时，每次抽签同样极其丰富且绝不重复）
@@ -53,7 +52,7 @@ const WISDOM_PATTERNS = [
   "【大修必备】面对审稿人的苛刻质问，你需要这盘{food}充当防具。碳水补足，大脑神清气爽，{jargon}，毕业近在咫尺！"
 ];
 
-// 智能离线生成器（确保即使没网，每次抽签文案也千变万化）
+// 智能离线生成器（确保即使无网络/API Key，每次抽签文案也千变万化）
 export const generateSmartOfflineFortune = (
   food: FoodItem,
   city: City,
@@ -98,6 +97,66 @@ export const generateSmartOfflineFortune = (
   };
 };
 
+// 智能离线 mentor 对话生成器（根据问题关键词定制，绝不简单重复）
+export const generateSmartOfflineMentorAnswer = (
+  userQuestion: string,
+  result: FortuneResult
+): string => {
+  const q = userQuestion.toLowerCase();
+  const foodName = result.food.name;
+  const major = result.major;
+
+  if (q.includes("拒稿") || q.includes("被拒") || q.includes("审稿") || q.includes("修改") || q.includes("reject")) {
+    const answers = [
+      `（博导解签）：审稿人给意见是好事！这说明论文离发表只有一步之遥。吃盘【${foodName}】把血糖拉高，把意见拆成10个具体修改项，大修（Major Revision）变小修，这篇${major}论文必拿下！`,
+      `（博导解签）：老夫当年也被拒过三四次！科研的韧性就是这么磨出来的。先享用这顿【${foodName}】，今晚按审稿人的要求补充对比实验，补完数据论文质感瞬间提升！`,
+      `（博导解签）：被拒稿不要沮丧！往往改投另一个顶刊反而直接被接收。吃饱【${foodName}】，重新调整Abstract和Intro，明晚重新Push投递！`
+    ];
+    return answers[Math.floor(Math.random() * answers.length)];
+  }
+
+  if (q.includes("开题") || q.includes("答辩") || q.includes("汇报") || q.includes("组会") || q.includes("ppt") || q.includes("导师")) {
+    const answers = [
+      `（博导解签）：组会汇报最忌空腹上阵！吃好【${foodName}】，把逻辑框架理清晰。导师提问时保持从容，懂的自信作答，不确定的坦承“会后重点跟进”，稳稳过关！`,
+      `（博导解签）：导师也是从博士过来的，最看重的是你的研究态度和逻辑链。吃完【${foodName}】，给PPT加上清晰的示意图与对比表格，组会上一定让导师眼前一亮！`,
+      `（博导解签）：汇报前深呼吸！今天运势处于${result.luck}，吃顿【${foodName}】补充气血，你的汇报思路会像滑溜的面条一样顺畅，不必焦虑。`
+    ];
+    return answers[Math.floor(Math.random() * answers.length)];
+  }
+
+  if (q.includes("代码") || q.includes("bug") || q.includes("报错") || q.includes("模型") || q.includes("跑不通") || q.includes("loss")) {
+    const answers = [
+      `（博导解签）：代码跑不通往往是因为盯着屏幕久了陷入思维定势。吃顿【${foodName}】换个环境，回来加几个Print或断点，5分钟就能定位那个隐藏Bug！`,
+      `（博导解签）：调参就像煮【${foodName}】，火候与学习率都要慢慢试。今天抽中${result.luck}，吃饱饭后重跑一次，Loss 曲线绝对给你展现完美的下降趋势！`,
+      `（博导解签）：先把显存释放一下，安心吃完【${foodName}】。脑子清醒后重新检查输入维度与数据清洗脚本，代码一次Passed就在今晚！`
+    ];
+    return answers[Math.floor(Math.random() * answers.length)];
+  }
+
+  if (q.includes("毕业") || q.includes("延毕") || q.includes("学位") || q.includes("文章") || q.includes("发表")) {
+    const answers = [
+      `（博导解签）：博士毕业是一场马拉松而非百米冲刺。今天这顿【${foodName}】就是你的中途补给站。一步一个脚印，把论文大纲写实，毕业证书近在咫尺！`,
+      `（博导解签）：焦虑源于对未知的不确定。吃饱【${foodName}】，列出毕业前的三个最关键任务清单，每天完成一点点，按时顺利毕业指日可待！`
+    ];
+    return answers[Math.floor(Math.random() * answers.length)];
+  }
+
+  if (q.includes("吃") || q.includes("味道") || q.includes("好吃") || q.includes("量") || q.includes("推荐")) {
+    return `（博导解签）：这道【${foodName}】在${result.city}可是口碑佳品！碳水扎实，热乎暖胃。吃饱了不仅心情愉悦，脑力细胞活跃度还能飙升，赶紧去尝尝！`;
+  }
+
+  // 默认多样化随机回复
+  const defaultAnswers = [
+    `（博导解签）：同学，“${userQuestion}”这个问题问得深刻！科研路上遇到瓶颈很正常。眼下最好的策略就是吃饱这顿【${foodName}】，让大脑在饱腹状态下重新演算，答案往往不期而至。`,
+    `（博导解签）：老导师告诉你个秘诀：80%的科研焦虑都是因为低血糖。先把【${foodName}】吃完，今晚精神抖擞，无论是改论文还是做模拟，统统不在话下！`,
+    `（博导解签）：关于“${userQuestion}”，其实你心里已经有了答案。保持节奏，吃好这顿【${foodName}】，给自己的脑细胞做个全套SP，今晚效率起飞！`,
+    `（博导解签）：在${result.city}做${result.major}，最重要就是一口气。吃完【${foodName}】，去实验室把手头的事做专做精，你的成果迟早会闪耀全场！`
+  ];
+
+  return defaultAnswers[Math.floor(Math.random() * defaultAnswers.length)];
+};
+
+// 交互式 AI 灵签获取（优先调用后端 Gemini 服务，失败后无缝切换智能离线引擎）
 export const getPhDFortune = async (
   food: FoodItem,
   city: City,
@@ -105,117 +164,55 @@ export const getPhDFortune = async (
   luck: string,
   major: PhDMajor
 ): Promise<FortuneDetail> => {
-  const apiKey = process.env.API_KEY || process.env.GEMINI_API_KEY || "";
-
-  if (!apiKey) {
-    console.warn("Gemini API Key missing, using Smart Offline Engine");
-    return generateSmartOfflineFortune(food, city, mealTime, luck, major);
-  }
-
   try {
-    const ai = new GoogleGenAI({ apiKey });
-    const prompt = `
-你是一位极其幽默、深谙博士生痛点与科研梗的“博士灵签解签老导师”。
-请为正在求签选择餐点的博士生生成一份个性化【灵签解签】。
-
-背景信息：
-- 所在城市/科研据点：${city}
-- 当前餐饮时段：${mealTime}
-- 抽到的推荐美食：${food.name} (${food.description})
-- 今日抽到的运势：${luck}
-- 博士研究专业方向：${major}
-
-请严格输出 JSON 格式，包含以下字段：
-1. "title": 4-8字吉利签文标题（例如："【大吉·数值模拟通畅】" 或 "【上上签·审稿人全赞成】"）
-2. "yi": 适合今天做的一件学术/生活的具体事（例如："宜：提交Manuscript，找导师签字"）
-3. "ji": 今天应避免的一件坑人小事（例如："忌：与导师眼神直视超过三秒"）
-4. "wisdom": 70字左右解签评语。结合${major}专业梗、${food.name}的美食特色，语言接地气，幽默且充满正向情绪价值！
-5. "paperBoost": 具体的论文/科研提升幽默数值（例如："毕业进度 +1.5%, Loss 下降 0.08"）
-
-注意：仅返回纯 JSON 格式，不要添加 markdown 标记之外的内容。
-`;
-
-    const response = await ai.models.generateContent({
-      model: "gemini-3.6-flash",
-      contents: prompt,
-      config: {
-        temperature: 0.85,
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            title: { type: Type.STRING },
-            yi: { type: Type.STRING },
-            ji: { type: Type.STRING },
-            wisdom: { type: Type.STRING },
-            paperBoost: { type: Type.STRING }
-          },
-          required: ["title", "yi", "ji", "wisdom", "paperBoost"]
-        }
-      }
+    const res = await fetch("/api/fortune", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ food, city, mealTime, luck, major })
     });
 
-    const responseText = response.text;
-    if (responseText) {
-      const parsed = JSON.parse(responseText) as FortuneDetail;
-      return {
-        ...parsed,
-        isAIGenerated: true
-      };
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.title && data.wisdom && !data.error) {
+        return {
+          title: data.title,
+          yi: data.yi,
+          ji: data.ji,
+          wisdom: data.wisdom,
+          paperBoost: data.paperBoost,
+          isAIGenerated: true
+        };
+      }
     }
-  } catch (error) {
-    console.error("Gemini API generate fortune error:", error);
+  } catch (err) {
+    console.warn("Call /api/fortune error, switching to smart offline generator:", err);
   }
 
-  // 出错时使用智能本地算法生成，确保绝不重复
   return generateSmartOfflineFortune(food, city, mealTime, luck, major);
 };
 
-// 交互式 AI 导师解签对话功能
+// 交互式 AI 导师解签对话（优先调用后端 Gemini 服务，失败后调用智能离线回答引擎）
 export const askPhDMentor = async (
   userQuestion: string,
   result: FortuneResult,
   chatHistory: Array<{ role: 'user' | 'model'; text: string }> = []
 ): Promise<string> => {
-  const apiKey = process.env.API_KEY || process.env.GEMINI_API_KEY || "";
-
-  if (!apiKey) {
-    return `（智囊导师）：同学，关于你问的“${userQuestion}”，老夫建议你先把眼前这份${result.food.name}吃完！胃里有食物，脑里才有思路，${result.detail.yi}，今日大吉，必无险阻！`;
-  }
-
   try {
-    const ai = new GoogleGenAI({ apiKey });
-    const historyPrompt = chatHistory.map(m => `${m.role === 'user' ? '博士生' : '解签导师'}: ${m.text}`).join('\n');
-
-    const prompt = `
-你是一位懂科研、体贴学生、幽默智慧的博导解签人。
-当前学生抽到的灵签背景：
-- 城市：${result.city}
-- 推荐食物：${result.food.name}
-- 专业方向：${result.major}
-- 今日运势：${result.luck}
-- 签文：${result.detail.title} - ${result.detail.wisdom}
-
-学生向你发起的提问：
-"${userQuestion}"
-
-历史对话：
-${historyPrompt}
-
-请以“博导解签人”的口吻，用100字以内给出幽默、真诚、有具体指导意义的回答，帮他排解科研焦虑，或者给出具体的补给建议。
-`;
-
-    const response = await ai.models.generateContent({
-      model: "gemini-3.6-flash",
-      contents: prompt,
-      config: {
-        temperature: 0.8
-      }
+    const res = await fetch("/api/ask-mentor", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userQuestion, result, chatHistory })
     });
 
-    return response.text || `先把这顿【${result.food.name}】吃好，科研没有什么是一顿美食解决不了的！`;
-  } catch (e) {
-    console.error("askPhDMentor error:", e);
-    return `（智囊导师）：科研路漫漫，先把眼前这盘【${result.food.name}】吃光。补充好血糖，再回去把问题拿捏得死死的！`;
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.answer && !data.error) {
+        return data.answer;
+      }
+    }
+  } catch (err) {
+    console.warn("Call /api/ask-mentor error, switching to offline mentor answer:", err);
   }
+
+  return generateSmartOfflineMentorAnswer(userQuestion, result);
 };

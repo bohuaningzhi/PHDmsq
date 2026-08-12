@@ -225,8 +225,29 @@ const ResultModal: React.FC<ResultModalProps> = ({ result, onClose }) => {
               )}
             </div>
 
+            {/* Quick Prompt Chips */}
+            <div className="flex gap-1.5 overflow-x-auto pb-1 text-[11px] no-scrollbar">
+              {[
+                "📩 论文被审稿人拒稿了咋办？",
+                "💻 代码/模型跑不通一直报错",
+                "📊 组会汇报PPT担心被导师问倒",
+                "🎓 毕业进度太慢很焦虑怎么办？"
+              ].map((chip) => (
+                <button
+                  key={chip}
+                  type="button"
+                  onClick={() => {
+                    setQuestion(chip);
+                  }}
+                  className="px-2.5 py-1 bg-white hover:bg-red-50 text-slate-600 hover:text-red-600 border border-slate-200 hover:border-red-200 rounded-full shrink-0 transition-all text-[11px] font-medium"
+                >
+                  {chip}
+                </button>
+              ))}
+            </div>
+
             {/* Question Input Form */}
-            <form onSubmit={handleAsk} className="mt-2 flex gap-2 pt-2 border-t border-slate-200">
+            <form onSubmit={handleAsk} className="mt-1 flex gap-2 pt-2 border-t border-slate-200">
               <input
                 type="text"
                 value={question}
