@@ -89,6 +89,12 @@ const App: React.FC = () => {
               </button>
             ))}
           </div>
+          {selectedCity === City.BEIJING && (
+            <div className="mt-3 p-2.5 bg-red-50/80 border border-red-100 rounded-xl text-[11px] text-red-700 font-medium flex items-center gap-1.5 animate-in fade-in">
+              <span className="shrink-0 text-red-500 font-bold">📍</span>
+              <span>已收录中国水利水电科学研究院（水科院/增光路/甘家口/车公庄西路）及海淀高校圈特色美食！</span>
+            </div>
+          )}
         </div>
 
         <div>

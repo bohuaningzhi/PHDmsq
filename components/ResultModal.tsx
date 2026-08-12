@@ -44,7 +44,16 @@ const ResultModal: React.FC<ResultModalProps> = ({ result, onClose }) => {
             </div>
             <div className="flex flex-wrap gap-2">
               {result.food.tags.map(tag => (
-                <span key={tag} className="text-[10px] bg-red-50 text-red-700 px-2 py-0.5 rounded border border-red-100 font-bold">
+                <span 
+                  key={tag} 
+                  className={`text-[10px] px-2 py-0.5 rounded border font-bold ${
+                    tag === '水科院'
+                      ? 'bg-blue-100 text-blue-900 border-blue-200 shadow-sm'
+                      : tag === '海淀区' 
+                      ? 'bg-amber-100 text-amber-900 border-amber-200' 
+                      : 'bg-red-50 text-red-700 border-red-100'
+                  }`}
+                >
                   #{tag}
                 </span>
               ))}
