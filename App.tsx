@@ -71,7 +71,13 @@ const App: React.FC = () => {
 
       try {
         const foods = FOOD_DATABASE[selectedCity][selectedMeal];
-        const randomFood = foods[Math.floor(Math.random() * foods.length)];
+        let randomFood = foods[Math.floor(Math.random() * foods.length)];
+        // 避免连续两次抽到完全相同的餐品（当选项大于1时）
+        if (result && foods.length > 1 && result.food.name === randomFood.name) {
+          const otherFoods = foods.filter(f => f.name !== result.food.name);
+          randomFood = otherFoods[Math.floor(Math.random() * otherFoods.length)];
+        }
+        
         const randomLuck = LUCK_LEVELS[Math.floor(Math.random() * LUCK_LEVELS.length)];
         
         // 智能 AI / 本地多维推理生成灵签
